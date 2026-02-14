@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MNIST Digit Recognizer - AI Powered</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- Gradient Background -->
+    <div class="gradient-bg"></div>
+    
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <i class="fas fa-brain"></i>
+                <h1>MNIST Digit Recognizer</h1>
+            </div>
+            <p class="subtitle">Dessinez un chiffre ou uploadez une image - L'IA le reconnaîtra !</p>
+        </header>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Left Panel - Input Methods -->
+            <div class="input-panel">
+                <!-- Tab Selector -->
+                <div class="tab-selector">
+                    <button class="tab-btn active" data-tab="draw">
+                        <i class="fas fa-pencil-alt"></i>
+                        Dessiner
+                    </button>
+                    <button class="tab-btn" data-tab="upload">
+                        <i class="fas fa-upload"></i>
+                        Upload
+                    </button>
+                </div>
+
+                <!-- Draw Tab -->
+                <div class="tab-content active" id="draw-tab">
+                    <div class="canvas-container">
+                        <canvas id="canvas" width="280" height="280"></canvas>
+                        <div class="canvas-overlay" id="canvas-overlay">
+                            <i class="fas fa-pencil-alt"></i>
+                            <p>Dessinez un chiffre ici</p>
+                        </div>
+                    </div>
+
+                    <div class="canvas-controls">
+                        <button class="btn btn-secondary" onclick="clearCanvas()">
+                            <i class="fas fa-eraser"></i>
+                            Effacer
+                        </button>
+                        <div class="brush-size">
+                            <label>Taille du pinceau:</label>
+                            <input type="range" id="brush-size" min="5" max="20" value="10">
+                            <span id="brush-size-value">10</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upload Tab -->
+                <div class="tab-content" id="upload-tab">
+                    <div class="upload-area" id="upload-area">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Glissez-déposez une image</h3>
+                        <p>ou cliquez pour sélectionner</p>
+                        <input type="file" id="file-input" accept="image/*" hidden>
+                        <button class="btn btn-secondary" onclick="document.getElementById('file-input').click()">
+                            <i class="fas fa-folder-open"></i>
+                            Choisir une image
+                        </button>
+                    </div>
+
+                    <div class="preview-container" id="preview-container" style="display: none;">
+                        <img id="preview-image" alt="Preview">
+                        <button class="btn btn-secondary btn-small" onclick="removeImage()">
+                            <i class="fas fa-times"></i>
+                            Supprimer
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Predict Button -->
+                <button class="btn btn-primary" id="predict-btn" onclick="predict()">
+                    <i class="fas fa-magic"></i>
+                    Prédire le Chiffre
+                    <div class="btn-glow"></div>
+                </button>
+            </div>
+
+            <!-- Right Panel - Results -->
+            <div class="results-panel">
+                <div class="results-header">
+                    <i class="fas fa-chart-line"></i>
+                    <h2>Résultats</h2>
+                </div>
+
+                <!-- Prediction Display -->
+                <div class="prediction-container" id="prediction-container">
+                    <div class="prediction-placeholder">
+                        <i class="fas fa-robot"></i>
+                        <p>En attente de prédiction...</p>
+                    </div>
+                </div>
+
+                <!-- Result Card (hidden by default) -->
+                <div class="result-card" id="result-card" style="display: none;">
+                    <div class="predicted-digit">
+                        <span id="predicted-number">?</span>
+                    </div>
+                    <div class="confidence-section">
+                        <div class="confidence-label">
+                            <span>Confiance</span>
+                            <span id="confidence-value">0%</span>
+                        </div>
+                        <div class="confidence-bar">
+                            <div class="confidence-fill" id="confidence-fill"></div>
+                        </div>
+                    </div>
+                    <div class="result-details">
+                        <div class="detail-item">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Prédiction réussie</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Loading Animation -->
+                <div class="loading" id="loading" style="display: none;">
+                    <div class="spinner"></div>
+                    <p>Analyse en cours...</p>
+                </div>
+
+                <!-- Error Message -->
+                <div class="error-message" id="error-message" style="display: none;">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <p id="error-text"></p>
+                </div>
+
+                <!-- Info Section -->
+                <div class="info-section">
+                    <h3><i class="fas fa-info-circle"></i> Comment ça marche ?</h3>
+                    <ul>
+                        <li>✨ Réseau de neurones entraîné sur MNIST</li>
+                        <li>🎯 Précision > 98% sur le dataset de test</li>
+                        <li>⚡ Prédiction en temps réel</li>
+                        <li>🖼️ Support images 28x28 pixels</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>
+                <i class="fas fa-code"></i> 
+                Créé avec FastAPI & PyTorch
+                <span class="separator">•</span>
+                <i class="fas fa-heart" style="color: #fa709a;"></i>
+                Powered by AI
+            </p>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
