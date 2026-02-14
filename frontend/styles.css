@@ -6,9 +6,9 @@
 }
 
 :root {
-    --primary: #667eea;
-    --secondary: #764ba2;
-    --accent: #f093fb;
+    --primary: #26a45b;
+    --secondary: #096306;
+    --accent: #87ea80;
     --success: #43e97b;
     --warning: #fee140;
     --danger: #fa709a;
@@ -33,7 +33,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: linear-gradient(135deg, #26a45b 0%, #096306 50%, #87ea80 100%);
     z-index: -1;
     animation: gradientShift 15s ease infinite;
 }
